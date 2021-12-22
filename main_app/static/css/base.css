@@ -26,10 +26,10 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   min-height: 100vh;
-  --nav-bg: rgba(104, 197, 248, .7);
+  --nav-bg: rgba(250, 100, 100, 0.788);
   --nav-bg-ff: rgba(104, 197, 248, .9);
   --borders: rgb(36, 116, 248) solid 2px;
-  --text-color: rgb(17, 20, 17);
+  --text-color: rgb(0, 0, 0);
   --link-hover-color: rgb(16, 56, 158);
   --button-bg: rgb(245, 245, 245);
   --button-bg-hover: rgb(226, 226, 226);

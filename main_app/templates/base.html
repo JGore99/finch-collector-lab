@@ -19,17 +19,18 @@
 <body>
   <header>
     <div class="header-logo-container">
-      <a href="/">
+      {% comment %} <a href="/">
         <img 
-          src="" 
+          src="images/Car01.png"
           alt="The Car Collector Logo"
         >
-      </a>
+      </a> {% endcomment %}
     </div>
     <nav>
       <ul>
-        <li><a href="/cars">All Cars</a></li>
-        <li><a href="/about">About</a></li>
+        <li><a href="{% url 'cars_index' %}">All Cars</a></li>
+        <li><a href="{% url 'cars_create' %}">Add a Car</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
       </ul>
     </nav>
   </header>

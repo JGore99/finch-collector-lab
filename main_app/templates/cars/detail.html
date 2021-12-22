@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link 
+  rel="stylesheet" 
+  type="text/css" 
+  href="{% static 'css/car-detail.css' %}"
+/>
+{% endblock %}
+
+{% block content %}
+
+<section class="car-container">
+  <div class="car-img">
+    {% comment %} <img 
+      src="{% static 'images/sk8r-boi-cat.svg' %}" 
+      alt="A skater boy cat"
+    > {% endcomment %}
+  </div>
+  <div class="car-details">
+    <h1>{{ car.make }}</h1>
+    {% if car.year > 0 %}
+      <h2>A {{ car.year }} {{ car.model }}</h2>
+    {% else %}
+      <h2>A new {{ car.model }}.</h2>
+    {% endif %}
+    <p>{{ car.description }}</p>
+    {% comment %} New markup {% endcomment %}
+    <div class="car-actions">
+      <a href="{% url 'cars_update' car.id %}" class="btn warn">Edit</a>
+      <a href="{% url 'cars_delete' car.id %}" class="btn danger">Delete</a>
+    </div>
+    {% comment %} New markup above {% endcomment %}
+  </div>
+</section>
+
+{% endblock %}

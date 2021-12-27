@@ -3,10 +3,19 @@
 
 {% block head %}
 <link 
+  href="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.css" 
+  rel="stylesheet" 
+/>
+<script 
+  src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"
+>
+</script>
+<link 
   rel="stylesheet" 
   type="text/css" 
   href="{% static 'css/car-detail.css' %}"
 />
+<script defer src="{% static 'js/car-detail.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -20,19 +29,118 @@
   </div>
   <div class="car-details">
     <h1>{{ car.make }}</h1>
-    {% if car.year > 0 %}
-      <h2>A {{ car.year }} {{ car.model }}</h2>
-    {% else %}
-      <h2>A new {{ car.model }}.</h2>
-    {% endif %}
+    <h2>A {{ car.year }} {{ car.model }}</h2>
     <p>{{ car.description }}</p>
-    {% comment %} New markup {% endcomment %}
     <div class="car-actions">
       <a href="{% url 'cars_update' car.id %}" class="btn warn">Edit</a>
       <a href="{% url 'cars_delete' car.id %}" class="btn danger">Delete</a>
     </div>
-    {% comment %} New markup above {% endcomment %}
   </div>
 </section>
+{% comment %} Existing cat-container above {% endcomment %}
+<div class="sighting-color-container">
+  <section class="sightings">
+    <div class="subsection-title">
+      <h2>Sightings</h2>
+      {% comment %} <img 
+        src="{% static 'images/cat-cone.svg' %}" 
+        alt="An ice cream cone cat"
+      />
+      <img 
+        src="{% static 'images/cat-onigiri.svg' %}"
+        alt="A cat as onigiri"
+      />
+      <img 
+        src="{% static 'images/kitty-kabob.svg' %}" 
+        alt="A kabob of kittens"
+      /> {% endcomment %}
+    </div>
+    <h3>Add a Sighting</h3>
+    <form
+      action="{% url 'add_sighting' car.id %}" 
+      method="post" 
+      class="subsection-content"
+    >
+      {% comment %} New markup below {% endcomment %}
+      {% if car.seen_today %}
+        <p class="seen">{{car.make}} {{car.model}} was spotted today!</p>
+      {% else %}
+        <p class="not seen">A {{car.make}} {{car.model}} might be pretty rare!</p>
+      {% endif %}
+      {% comment %} New markup above {% endcomment %}
+      {% csrf_token %}
+      {{ sighting_form.as_p }}
+      <button type="submit" class="btn submit">Add Sighting</button>
+    </form>
+    <h3>Past Sightings</h3>
+    {% if car.sighting_set.all.count %}
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+          {% for sighting in car.sighting_set.all %}
+            <tr>
+              <td>{{sighting.date}}</td>
+              <td>{{sighting.get_sighting_display}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="subsection-content">{{car.name}} has never been spotted 😟</p>
+    {% endif %}
+    <section class="locations">
+      <div class="subsection-title">
+        <h2>Locations</h2>
+        {% comment %} <img src="{% static 'images/string.svg' %}" alt="A ball of string" />
+        <img src="{% static 'images/mouse.svg' %}" alt="A mouse" />
+        <img src="{% static 'images/fish.svg' %}" alt="A fishy location" /> {% endcomment %}
+      </div>
+      <h3>{{  car.make }} {{  car.model }}'s Locations</h3>
+      <div class="subsection-content">
+        {% if car.locations.count %}
+          {% for location in car.locations.all %}
+            <div class="location-container">
+              <div 
+                class="color-block"
+                style="background-color: {{ location.color }}"
+              ></div>
+              <a href="{% url 'locations_detail' location.id %}">
+                <p>A {{ location.color }} {{ location.name }}</p>
+              </a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="no-location">{{car.model}} doesn't have any likely places to be seen. 😞</p>
+        {% endif %}
+      </div>
+      <h3>Popular Locations</h3>
+      <div class="subsection-content">
+        {% comment %} We'll display available locations here {% endcomment %}
+        {% if locations.count %}
+          {% for location in locations.all %}
+            <div class="location-container">
+              <div 
+                class="color-block"
+                style="background-color: {{ location.color }}"
+              ></div>
+              <a href="{% url 'locations_detail' location.id %}">
+                <p>A {{ location.color }} {{ location.name }}</p>
+              </a>
+              <form action="{% url 'assoc_location' car.id location.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn submit">Attach location</button>
+              </form>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="all-locations">
+            The {{car.make}} {{car.model}} has been spotted everywhere! 🥳
+          </p>
+        {% endif %}
+      </div>
+    </section>
+  </div>
 
 {% endblock %}

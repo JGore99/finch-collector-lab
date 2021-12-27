@@ -1,0 +1,24 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block head %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/toy-detail.css' %}"
+/>
+{% endblock %}
+
+{% block content %}
+  
+<div class="card" style="border-color: {{ location.color }}">
+  <div class="card-bg" style="background-color: {{ location.color }}"></div>
+  <div class="card-content">
+    <h2>{{ location.name }}</h2>
+    <p>A {{ location.color }} toy</p>
+  </div>
+</div>
+<a href="{% url 'locations_update' location.id %}" class="btn warn">Edit</a>
+<a href="{% url 'locations_delete' location.id %}" class="btn danger">Delete</a>
+
+{% endblock %}
